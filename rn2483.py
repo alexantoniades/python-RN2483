@@ -1,33 +1,23 @@
 #!/usr/bin/python
 
-# Apache License
+# Apache License 2.0
 # Copyright (c) 2019 Alexandros Antoniades
 
 # Author: Alexandros Antoniades
 # Date: 16/07/2019
 # Description: Python library for RN2483 LoRaWAN transceiver
+# This implementation is meant to be used with a Micropython implementation on Raspberry Pi, ESP32, PyBoard etc.
 # Version: 0.1
 
 # RN2483 documentation: https://ww1.microchip.com/downloads/en/DeviceDoc/40001784B.pdf
 
 import time
 import sys
-import crypto
-try:
-    import RPi.GPIO as gpio
-    dev_env = False
-except(ImportError, RuntimeError):
-    dev_env = True
+import Crypto
+from machine import UART, ADC, Pin, PWM
     
-    
-class LoRa:
-    def __init__(self):
-        return(0)
-    
-    
-    
-class LoRaWAN:
-     COMMANDS = {
+# Commands for RN2483 and RN2903 can be found in the product user guide by Microchip
+COMMANDS = {
         "SYS_SLEEP": b"sys sleep {}",
         "SYS_RST": b"sys reset",
         "SYS_FACRST": b"sys factoryRESET",
@@ -80,20 +70,32 @@ class LoRaWAN:
         "MAC_RXSET": b"mac set rx2 {0} {1}",
     }
 
-    def __init__(self, port=None, debug=False):
-        self.port = port
+class LoRa:
+    
+    def __init__(self, serial=None, debug=False):
+        self.serial = serial
         self.debug = debug
         
-        if self.port == None:
-            raise ValueError("Invalid serial port")
+        if self.serial == None:
+            raise ValueError("Invalid serial connection")
         
-        
-        
-
-
+    def serialConnection(self):
+        return(self.serial)
+    
+    def closeConnection(self):
+        return(self.serial.deinit())
+    
+    def execute(self, command):
+        self.serial.write(command + "\r\n")
+        response = str(self.serial.readline())
+        if self.debug:
+            print("Execute: {} Response: {}\r\n").format(command, response)
+        return(response)
 
 def main():
-    return(0)
+    serial = UART(PORT, BAUDRATE)
+    serial.init(BAUDRATE, bites=8, parity=None, stop=1)
+    
     
     
 if __name__ == "__main__":
