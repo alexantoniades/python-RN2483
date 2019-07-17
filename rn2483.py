@@ -91,10 +91,16 @@ class LoRa:
         if self.debug:
             print("Execute: {} Response: {}\r\n").format(command, response)
         return(response)
+        
+    def cmd(self, command):
+        return execute(self.COMMANDS[str(command)])
+        
+    def version(self):
+        return cmd()
 
 def main():
     serial = UART(PORT, BAUDRATE)
-    serial.init(BAUDRATE, bites=8, parity=None, stop=1)
+    serial.init(BAUDRATE, bits=8, parity=None, stop=1)
     
     
     
