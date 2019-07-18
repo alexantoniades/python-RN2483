@@ -15,8 +15,6 @@ import time
 import sys
 import Crypto
 from machine import UART, ADC, Pin, PWM
-    
-
 
 class RN2483:
     # Commands for RN2483 and RN2903 can be found in the product user guide by Microchip
@@ -50,7 +48,7 @@ class RN2483:
                 "GPIO11": "sys set pindig GPIO11 {state}",
                 "GPIO12": "sys set pindig GPIO12 {state}",
                 "GPIO13": "sys set pindig GPIO13 {state}",
-                "GPIO14": "sys set pindig GPIO14 {state}"
+                "GPIO14": "sys set pindig GPIO14 {state}",
                 "UART_CTS": "sys set pindig UART_CTS {state}",
                 "UART_RTS": "sys set pindig UART_RTS {state}"
             }
@@ -113,7 +111,7 @@ class RN2483:
             "APPSKEYSET": "mac set appskey {key}",
             "BAT": "mac set bat {level}",
             "LINK_CKECK": "mac set linkchk {check}",
-        }
+        },
         # Radio interface
         "RADIO": {
             "RX": "radio rx {size}",
@@ -212,7 +210,7 @@ class RN2483:
     
     # Get device version
     def version(self):
-        return(execute(self.COMMANDS["SYSTEM"]["VERSION"])
+        return(execute(self.COMMANDS["SYSTEM"]["VERSION"]))
     
     # Get device voltage level
     def voltage(self):
@@ -235,7 +233,7 @@ class RN2483:
 
     # Set device to sleep for specific duration (duration in milliseconds)
     def sleep(self, duration):
-        return(execute(self.COMMANDS["SYSTEM"]["SLEEP"].format(duration=str(duration)))
+        return(execute(self.COMMANDS["SYSTEM"]["SLEEP"].format(duration=str(duration))))
     
     # Set device to reset (ON OFF)
     def reset(self):
