@@ -13,7 +13,6 @@
 
 import time
 import sys
-import Crypto
 from machine import UART, ADC, Pin, PWM
 
 class RN2483:
