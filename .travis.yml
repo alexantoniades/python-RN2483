@@ -26,6 +26,7 @@ jobs:
             - git submodule update --init lib/berkeley-db-1.xx
             - make ${MAKEOPTS} -C mpy-cross
             - make ${MAKEOPTS} -C ports/esp32 ESPIDF=$(pwd)/esp-idf
+            - ./micropython -m upip install micropython-machine
             
 script:
     - python3 rn2483.py

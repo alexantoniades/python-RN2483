@@ -11,7 +11,7 @@
 
 # RN2483 documentation: https://ww1.microchip.com/downloads/en/DeviceDoc/40001784B.pdf
 
-from machine import uart
+from machine import UART, ADC, Pin, PWM
 import time
 import sys
 
@@ -201,7 +201,7 @@ class RN2483:
     
     # Pass and Execute command to device, return device response
     def execute(self, command):
-        self.serial.write(bytes(command + "\r\n", "utf-8"))
+        self.serial.write(bytes(str(command) + "\r\n", "utf-8"))
         response = str((self.serial.readline()).decode("utf-8"))
         if self.debug:
             print("Execute: {command} Response: {response}\r\n").format(command=str(command), response=response)
