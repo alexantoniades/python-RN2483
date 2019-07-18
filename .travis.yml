@@ -21,7 +21,7 @@ jobs:
             - export PATH=$(pwd)/xtensa-esp32-elf/bin:$PATH
             - git clone https://github.com/espressif/esp-idf.git
             - git -C esp-idf checkout $(grep "ESPIDF_SUPHASH :=" ports/esp32/Makefile | cut -d " " -f 3)
-            - git -C esp-idf submodule update --init components/json/cJSON components/esp32/lib components/esptool_py/esptool components/expat/expat components/lwip/lwip components/mbedtls/mbedtls components/micro-ecc/micro-ecc components/nghttp/nghttp2
+            #- git -C esp-idf submodule update --init components/json/cJSON components/esp32/lib components/esptool_py/esptool components/expat/expat components/lwip/lwip components/mbedtls/mbedtls components/nghttp/nghttp2
           script:
             - git submodule update --init lib/berkeley-db-1.xx
             - make ${MAKEOPTS} -C mpy-cross
