@@ -11,9 +11,9 @@
 
 # RN2483 documentation: https://ww1.microchip.com/downloads/en/DeviceDoc/40001784B.pdf
 
+from machine import uart
 import time
 import sys
-from machine import UART, ADC, Pin, PWM
 
 class RN2483:
     # Commands for RN2483 and RN2903 can be found in the product user guide by Microchip
