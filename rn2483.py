@@ -19,9 +19,13 @@ DOC = {
 }
 GIT = "https://github.com/alexantoniades/python-RN2483"
 
-from machine import UART, ADC, Pin, PWM
+#from machine import UART, ADC, Pin, PWM
 import time
 import sys
+import serial
+
+PORT = "/dev/tty"
+BAUDRATE = 57600
 
 class RN2483:
     # Commands for RN2483 and RN2903 can be found in the product user guide by Microchip
@@ -275,17 +279,11 @@ Github repository can be found at {github}
     
     
 def main():
-    
-    PORT = 1
-    BAUDRATE = 57600
-    
-    uart = UART(PORT, BAUDRATE)
-    uart.init(BAUDRATE, bits=8, parity=None, stop=1)
-    
+    uart = serial.Serial(PORT, BAUDRATE)
+
     device = RN2483(serial=uart, debug=True)
     
-    
-    
+    uart.close()
     
 if __name__ == "__main__":
     main()
