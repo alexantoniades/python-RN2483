@@ -1,17 +1,21 @@
 #!/usr/bin/python
 
+#from machine import UART, ADC, Pin, PWM
+#import time
+#import sys
+#TODO: Platform recognition and timestamps
+import serial
+
 LICENSE = """
 Apache License 2.0
 Copyright (c) 2019 Alexandros Antoniades
 """
 AUTHOR = "Alexandros Antoniades"
 DESCRIPTION = """
-            [ RN2483 Library ]
-Python library for RN2483 LoRaWAN transceiver
-This implementation is meant to be used with a 
-Micropython implementation on Raspberry Pi, ESP32, 
-PyBoard etc.
-[------------------------------------------------]"""
+                      [ RN2483 Library ]
+    Python library for RN2483 LoRaWAN transceiver
+    This implementation is meant to be used on Raspberry Pi.
+    [-------------------------------------------------------]"""
 VERSION = "0.1"
 DOC = { 
     "UserGuide": "https://ww1.microchip.com/downloads/en/DeviceDoc/40001784B.pdf",
@@ -19,10 +23,7 @@ DOC = {
 }
 GIT = "https://github.com/alexantoniades/python-RN2483"
 
-#from machine import UART, ADC, Pin, PWM
-import time
-import sys
-import serial
+
 
 PORT = "/dev/tty"
 BAUDRATE = 57600
@@ -124,10 +125,13 @@ class RN2483:
             "MARGIN": "mac get mrgn",
             "GATEWAY_NUMBER": "mac get gwnb",
             "STATUS": "mac get status",
-            "NWKSKEYSET": "mac set nwkskey {key}",              # key = 16-byte Hexadecimal
-            "APPSKEYSET": "mac set appskey {key}",              # key = 16-bute Hexadecimal
+            "JOIN": "mac join {mode}",                          # mode = otaa or abp
+            "NWKSKEY": "mac set nwkskey {key}",              # key = 16-byte Hexadecimal
+            "APPSKEY": "mac set appskey {key}",              # key = 16-byte Hexadecimal
+            "APPKEY": "mac set appkey {key}",                # key = 16-byte Hexadecimal
             "BAT": "mac set bat {level}",                       # level = decimal [0-255]
             "LINK_CKECK": "mac set linkchk {check}"             # check = decimal [0-65535]
+
         },
         # Radio interface
         "RADIO": {
@@ -209,6 +213,17 @@ class RN2483:
         if self.serial == None:
             raise ValueError("Invalid serial connection")
         
+    def report(self):
+        return("""
+    {description}
+    
+    By {author}
+    Version: {version}
+    Github repository can be found at {github}
+    
+    {license}
+        """.format(description=DESCRIPTION, author=AUTHOR, version=VERSION, github=GIT, license=LICENSE))    
+    
     # Get serial connection
     def serialConnection(self):
         return(self.serial)
@@ -262,28 +277,79 @@ class RN2483:
     def setPin(self, pin, state):
         return(self.execute(self.COMMANDS["SYSTEM"]["PIN"][str(pin)].format(state=str(state))))
         
-    def report(self):
-        return("""
-{description}
+    # Setup LoRaWAN client     
+    def configLoraWAN(self, auth=None, nwkskey=None, appskey=None, appkey=None, appeui=None, devaddr=None, power=14):
+        if self.auth == "ABP":
+            if self.debug:
+                print("Initializing LoRaWAN - Authorization = ABP")
+            self.execute(self.COMMANDS["SYSTEM"]["HWEUI"])
+            
+            if self.debug:
+                print("Configuring Network Session Key - Key: {nwkskey}".format(nwkskey=nwkskey))
+            self.execute(self.COMMANDS["MAC"]["NWKSKEY"].format(key=nwkskey))
+            
+            if self.debug:
+                print("Configuring Application Session Key - Key: {appskey}".format(appskey=appskey))
+            self.execute(self.COMMANDS["MAC"]["APPSKEY"].format(key=appskey))
 
-By {author}
-Version: {version}
-Github repository can be found at {github}
+            if self.debug:
+                print("Configuring Device Address - Address: {devaddr}".format(devaddr=devaddr))
+            self.execute(self.COMMANDS["MAC"]["SET"]["DEVADDR"].format(address=devaddr))
+            
+            if self.debug:
+                print("Configuring Adaptive Data Rate")
+            self.execute(self.COMMANDS["MAC"]["SET"]["ADAPTIVE_DATARATE"].format(state="on"))
 
-{license}
-        """.format(description=DESCRIPTION, author=AUTHOR, version=VERSION, github=GIT, license=LICENSE))
-        
-    # Setup LoRaWAN client
-    def setup(self):
-        return 0
+            if self.debug:
+                print("Setting transmit power to {power}".format(power=str(power))
+            self.execute(self.COMMANDS["RADIO"]["POWER"]["SET"].format(level=str(power)))
+
+            if self.debug:
+                print("Saving configuration")
+            self.execute(self.COMMANDS["MAC"]["SAVE"])
+
+            if self.debug:
+                print("Joining...")
+            self.execute(self.COMMANDS["MAC"]["JOIN"].format(mode="abp"))
+
+        elif self.auth == "OTAA" or self.auth == "otaa":
+            if self.debug:
+                print("Initializing LoRaWAN - Authorization = OTAA")
+            self.execute(self.COMMANDS["SYSTEM"]["HWEUI"])
+            
+            if self.debug:
+                print("Configuring Application Key - Key: {appkey}".format(appkey=appkey))
+            self.execute(self.COMMANDS["MAC"]["APPKEY"].format(key=appkey))
+            
+            if self.debug:
+                print("Configuring Application EUI - Key: {appeui}".format(appeui=appeui))
+            self.execute(self.COMMANDS["MAC"]["SET"]["APPEUI"].format(appeui=appeui))
+
+            if self.debug:
+                print("Saving configuration")
+            self.execute(self.COMMANDS["MAC"]["SAVE"])
+
+            if self.debug:
+                print("Joining...")
+            self.execute(self.COMMANDS["MAC"]["JOIN"].format(mode="otaa"))
+
+        else:
+            print("Error with LoRaWAN configuration")
+
     
+            
+
     
 def main():
     uart = serial.Serial(PORT, BAUDRATE)
 
     device = RN2483(serial=uart, debug=True)
+    print(device)
+
+
     
     uart.close()
     
 if __name__ == "__main__":
     main()
+    
