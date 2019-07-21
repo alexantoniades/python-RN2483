@@ -28,7 +28,7 @@ class RN2483:
         # System commands
         "SYSTEM": {
             "SLEEP": "sys sleep {duration}",                    # duration = decimal [milliseconds]
-            "RESET": "sys reset",
+            "RESET": "sys reset",                               
             "FACTORY_RESET": "sys factoryRESET",
             "ERASEFW": "sys eraseFW",
             "VERSION": "sys get ver",
@@ -66,7 +66,7 @@ class RN2483:
                 "433": "mac reset 433"
             },
             "TX": {
-                "CONFIRMED": "mac tx cnf {portnumber} {data}",  # portnumber = decimal [1-223]
+                "CONFIRMED": "mac tx cnf {portnumber} {data}",  # portnumber = decimal [1-223] 
                 "UNCONFIRMED": "mac tx uncnf {portnumber} {data}" # data = Hexadecimal
             },
             "SAVE": "mac save",
@@ -79,7 +79,7 @@ class RN2483:
             },
             "DEVEUI": {
                 "GET": "mac get deveui",
-                "SET": "mac set deveui {deveui}"            # deveui = 8-byte Hexadecimal
+                "SET": "mac set deveui {deveui}"            # deveui = 8-byte Hexadecimal        
             },
             "APPEUI": {
                 "GET": "mac get appeui",
@@ -202,122 +202,123 @@ class RN2483:
         ''' Class init, check if serial connection is open '''
         self.serial = serial
         self.debug = debug
-        if self.serial == None:
+        if self.serial is None:
             raise ValueError("Invalid serial connection")
-    def info(self):
-        ''' Returns Library info '''
-        return """
-    {description}
-    
-    By {author}
-    Version: {version}
-    Github repository can be found at {github}
-    
-    {license}
-        """.format(description=DESCRIPTION, author=AUTHOR, version=VERSION, github=GIT, license=LICENSE)
     # Get serial connection
     def serial_connection(self):
         ''' Serial connection info '''
-        return self.serial
+        return(self.serial)
     # Close serial connection
     def close_connection(self):
         ''' Close serial connection '''
-        return self.serial.deinit()
+        return(self.serial.deinit())
     # Pass and Execute command to device, return device response
     def execute(self, command):
         ''' Passes and Executes command to device, returns devices response '''
         self.serial.write(bytes(str(command) + "\r\n", "utf-8"))
         response = (self.serial.readline()).decode("utf-8")
         if self.debug:
-            print "Execute: {command} Response: {response}\r\n".format(command=command, response=response)
-        return response
+            print("Execute: {command} Response: {response}\r\n".format(command=command, response=response))
+        return(response)
     # Get device version
     def version(self):
         ''' Returns RN2483 version '''
-        return self.execute(self.COMMANDS["SYSTEM"]["VERSION"])
+        return(self.execute(self.COMMANDS["SYSTEM"]["VERSION"]))
     # Get device voltage level
     def voltage(self):
         ''' Returns RN2483 Voltage '''
-        return self.execute(self.COMMANDS["SYSTEM"]["VOLTAGE"])
+        return(self.execute(self.COMMANDS["SYSTEM"]["VOLTAGE"]))
     # Get device hardware EUI
     def hardware_eui(self):
         ''' Returns RN2483 Hardware EUI '''
-        return self.execute(self.COMMANDS["SYSTEM"]["HWEUI"])
+        return(self.execute(self.COMMANDS["SYSTEM"]["HWEUI"]))
     # Get value at specific address (address in HEX)
     def get_value_at_address(self, address):
         ''' Returns value at memory address '''
-        return self.execute(self.COMMANDS["SYSTEM"]["NVM"]["GET"].format(address=str(address)))
+        return(self.execute(self.COMMANDS["SYSTEM"]["NVM"]["GET"].format(address=str(address))))
     # Set a value at specific memory address (value in HEX)
     def set_value_at_address(self, address, value):
         ''' Sets value at memory address '''
-        return self.execute(self.COMMANDS["SYSTEM"]["NVM"]["SET"].format(address=str(address), value=str(value)))
+        return(self.execute(self.COMMANDS["SYSTEM"]["NVM"]["SET"].format(address=str(address), value=str(value))))
     # Set device to sleep for specific duration (duration in milliseconds)
     def sleep(self, duration):
         ''' Sets device to sleep '''
-        return self.execute(self.COMMANDS["SYSTEM"]["SLEEP"].format(duration=str(duration)))
+        return(self.execute(self.COMMANDS["SYSTEM"]["SLEEP"].format(duration=str(duration))))
     # Set device to reset (ON OFF)
     def reset(self):
         ''' Resets RN2483 '''
-        return self.execute(self.COMMANDS["SYSTEM"]["RESET"])
+        return(self.execute(self.COMMANDS["SYSTEM"]["RESET"]))
     # Factory reset device
     def factory_reset(self):
         ''' Factory resets RN2483 '''
-        return self.execute(self.COMMANDS["SYSTEM"]["FACTORY_RESET"])
+        return(self.execute(self.COMMANDS["SYSTEM"]["FACTORY_RESET"]))
     # Change state of GPIO pin: 1 = UP, 0 = DOWN
     def set_pin(self, pin, state):
         ''' Sets state of GPIO pin '''
-        return self.execute(self.COMMANDS["SYSTEM"]["PIN"][str(pin)].format(state=str(state)))
-    # Setup LoRaWAN client
+        return(self.execute(self.COMMANDS["SYSTEM"]["PIN"][str(pin)].format(state=str(state))))
+    # Setup LoRaWAN client     
     def config_lorawan(self, auth=None, nwkskey=None, appskey=None, appkey=None, appeui=None, devaddr=None, power=14):
         ''' Configures LoRaWAN functionlity to specified autorization method '''
-        if auth == "ABP" or auth == "abp":
+        if auth in ("ABP", "abp"):
             if self.debug:
-                print "Initializing LoRaWAN - Authorization = ABP"
+                print("Initializing LoRaWAN - Authorization = ABP")
             self.execute(self.COMMANDS["SYSTEM"]["HWEUI"])
             if self.debug:
-                print "Configuring Network Session Key - Key: {nwkskey}".format(nwkskey=nwkskey)
+                print("Configuring Network Session Key - Key: {nwkskey}".format(nwkskey=nwkskey))
             self.execute(self.COMMANDS["MAC"]["NWKSKEY"].format(key=nwkskey))
             if self.debug:
-                print "Configuring Application Session Key - Key: {appskey}".format(appskey=appskey)
+                print("Configuring Application Session Key - Key: {appskey}".format(appskey=appskey))
             self.execute(self.COMMANDS["MAC"]["APPSKEY"].format(key=appskey))
             if self.debug:
-                print "Configuring Device Address - Address: {devaddr}".format(devaddr=devaddr)
+                print("Configuring Device Address - Address: {devaddr}".format(devaddr=devaddr))
             self.execute(self.COMMANDS["MAC"]["SET"]["DEVADDR"].format(address=devaddr))
             if self.debug:
-                print "Configuring Adaptive Data Rate"
+                print("Configuring Adaptive Data Rate")
             self.execute(self.COMMANDS["MAC"]["SET"]["ADAPTIVE_DATARATE"].format(state="on"))
             if self.debug:
-                print "Setting transmit power to {power}".format(power=str(power))
+                print("Setting transmit power to {power}".format(power=str(power)))
             self.execute(self.COMMANDS["RADIO"]["POWER"]["SET"].format(level=str(power)))
             if self.debug:
-                print "Saving configuration"
+                print("Saving configuration")
             self.execute(self.COMMANDS["MAC"]["SAVE"])
             if self.debug:
-                print "Joining..."
+                print("Joining...")
             self.execute(self.COMMANDS["MAC"]["JOIN"].format(mode="abp"))
-        elif auth == "OTAA" or auth == "otaa":
+        elif auth in ("OTAA", "otaa"):
             if self.debug:
-                print "Initializing LoRaWAN - Authorization = OTAA"
+                print("Initializing LoRaWAN - Authorization = OTAA")
             self.execute(self.COMMANDS["SYSTEM"]["HWEUI"])
             if self.debug:
-                print "Configuring Application Key - Key: {appkey}".format(appkey=appkey)
+                print("Configuring Application Key - Key: {appkey}".format(appkey=appkey))
             self.execute(self.COMMANDS["MAC"]["APPKEY"].format(key=appkey))
             if self.debug:
-                print "Configuring Application EUI - Key: {appeui}".format(appeui=appeui)
+                print("Configuring Application EUI - Key: {appeui}".format(appeui=appeui))
             self.execute(self.COMMANDS["MAC"]["SET"]["APPEUI"].format(appeui=appeui))
             if self.debug:
-                print "Saving configuration"
+                print("Saving configuration")
             self.execute(self.COMMANDS["MAC"]["SAVE"])
             if self.debug:
-                print "Joining..."
+                print("Joining...")
             self.execute(self.COMMANDS["MAC"]["JOIN"].format(mode="otaa"))
         else:
-            print "Error with LoRaWAN configuration"
+            print("Error with LoRaWAN configuration")
+def info():
+    ''' Returns Library info '''
+    return("""
+{description}
+
+By {author}
+Version: {version}
+Github repository can be found at {github}
+
+{license}
+    """.format(description=DESCRIPTION, author=AUTHOR, version=VERSION, github=GIT, license=LICENSE))
 def main():
     ''' Main function '''
     uart = serial.Serial(PORT, BAUDRATE)
     device = RN2483(serial=uart, debug=True)
-    print device
+    print(info())
+    print(device)
     uart.close()
 if __name__ == "__main__":
     main()
