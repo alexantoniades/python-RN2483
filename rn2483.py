@@ -1,8 +1,23 @@
 #!/usr/bin/python
-''' RN2483 Library File '''
-#import time
-#import sys
-#TODO: Platform recognition and timestamps
+''' 
+                      [ RN2483 Library ]
+    Python library for RN2483 LoRaWAN transceiver
+    This implementation is meant to be used on Raspberry Pi.
+    [-------------------------------------------------------]
+    Version:
+    [0.1]:
+        + Changes:
+            - Completed command set dictionary
+            - Added compatibility for Raspberry Pi 3B+
+            - Added LoRaWAN configuration method
+            - Added dbeug mode for terminal response
+            - Used Pylint to improve quality of code
+            - Added DOC stirngs to methods and global
+        + TODO:
+            - Add micropython compatibility
+            - Use Cement framework to create terminal application
+            - Add error handling
+'''
 import serial
 LICENSE = """
 Apache License 2.0
@@ -198,25 +213,25 @@ class RN2483:
             }
         }
     }
-    def __init__(self, serial=None, debug=False):
+    def __init__(self, connection=None, debug=False):
         ''' Class init, check if serial connection is open '''
-        self.serial = serial
+        self.connection = connection
         self.debug = debug
-        if self.serial is None:
+        if self.connection is None:
             raise ValueError("Invalid serial connection")
     # Get serial connection
     def serial_connection(self):
         ''' Serial connection info '''
-        return(self.serial)
+        return(self.connection)
     # Close serial connection
     def close_connection(self):
         ''' Close serial connection '''
-        return(self.serial.deinit())
+        return(self.connection.deinit())
     # Pass and Execute command to device, return device response
     def execute(self, command):
         ''' Passes and Executes command to device, returns devices response '''
-        self.serial.write(bytes(str(command) + "\r\n", "utf-8"))
-        response = (self.serial.readline()).decode("utf-8")
+        self.connection.write(bytes(str(command) + "\r\n", "utf-8"))
+        response = (self.connection.readline()).decode("utf-8")
         if self.debug:
             print("Execute: {command} Response: {response}\r\n".format(command=command, response=response))
         return(response)
@@ -316,7 +331,7 @@ Github repository can be found at {github}
 def main():
     ''' Main function '''
     uart = serial.Serial(PORT, BAUDRATE)
-    device = RN2483(serial=uart, debug=True)
+    device = RN2483(connection=uart, debug=True)
     print(info())
     print(device)
     uart.close()
