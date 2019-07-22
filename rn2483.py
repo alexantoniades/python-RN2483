@@ -310,23 +310,11 @@ class RN2483:
             self.execute(self.COMMANDS["MAC"]["JOIN"].format(mode="otaa"))
         else:
             print("Error with LoRaWAN configuration")
-def info():
-    ''' Returns Library info '''
-    return("""
-{description}
-
-By {author}
-Version: {version}
-Github repository can be found at {github}
-
-{license}
-    """.format(description=DESCRIPTION, author=AUTHOR, version=VERSION, github=GIT, license=LICENSE))
 def main():
     ''' Main function '''
     try:
         uart = serial.Serial(PORT, BAUDRATE)
         device = RN2483(connection=uart, debug=True)
-        #print(info())
         print(device.connection.isOpen())
     finally:
         uart.close()
