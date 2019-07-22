@@ -260,10 +260,17 @@ class RN2483:
     def factory_reset(self):
         ''' Factory resets RN2483 '''
         return(self.execute(self.COMMANDS["SYSTEM"]["FACTORY_RESET"]))
-    # Change state of GPIO pin: 1 = UP, 0 = DOWN
     def set_pin(self, pin, state):
-        ''' Sets state of GPIO pin '''
+        ''' Sets state of GPIO pin (1 = UP / 0 = DOWN) '''
         return(self.execute(self.COMMANDS["SYSTEM"]["PIN"][str(pin)].format(state=str(state))))
+    def send(self, data):
+        ''' Send data over LoRaWAN '''
+        if self.debug:
+            print("Preparing for transmission...")
+        self.execute(self.COMMANDS["MAC"]["PAUSE"])
+        if self.debug:
+            print("Sending...")
+        self.execute(self.COMMANDS["RADIO"]["TX"].format(data=str(data)))
     # Setup LoRaWAN client     
     def config_lorawan(self, auth=None, nwkskey=None, appskey=None, appkey=None, appeui=None, devaddr=None, power=14):
         ''' Configures LoRaWAN functionlity to specified autorization method '''
