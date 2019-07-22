@@ -11,7 +11,7 @@
 | [7] | UART_RX | -> | [14] | UART_TX0 |
 | [6] | UART_TX | -> | [15] | UART_RX0 |
 
-## How to use
+## How to use it
 When importing library as module, import pyserial and initialize a connection using your assigned serial interface (e.g /dev/ttyUSB0 - in ubuntu).
 
 Install `pyserial`:
