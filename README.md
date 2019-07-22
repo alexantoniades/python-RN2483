@@ -40,7 +40,7 @@ BAUDRATE = 57600
 uart = serial.Serial(PORT, BAUDRATE)
 # Initialize transceiver
 device = rn2483(connection=uart, debug=True)
-# Check of device is initialized
+# Check if device is initialized
 print(device.connection.isOpen())
 # Check hardware eui
 print(device.hardware_eui())
