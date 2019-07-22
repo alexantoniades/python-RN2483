@@ -25,10 +25,9 @@ Copyright (c) 2019 Alexandros Antoniades
 """
 AUTHOR = "Alexandros Antoniades"
 DESCRIPTION = """
-                      [ RN2483 Library ]
-    Python library for RN2483 LoRaWAN transceiver
-    This implementation is meant to be used on Raspberry Pi.
-    [-------------------------------------------------------]"""
+Python library for RN2483 LoRaWAN transceiver
+This implementation is meant to be used on Raspberry Pi.
+"""
 VERSION = "0.1"
 DOC = {
     "UserGuide": "https://ww1.microchip.com/downloads/en/DeviceDoc/40001784B.pdf",
