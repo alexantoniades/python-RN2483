@@ -14,9 +14,13 @@
             - Used Pylint to improve quality of code
             - Added DOC stirngs to methods and global
         + TODO:
-            - Add micropython compatibility
+            - Add micropython compatibility (for ESP32)
             - Use Cement framework to create terminal application
             - Add error handling
+            - Create lighter client version for microcontrollers
+            - Integrate direct firmware flashing using esptool
+            - Add integration for direct topic creation and command pushing for ROS
+            - Add dynamic P2P network creation and deployment
 '''
 import serial
 LICENSE = """
@@ -329,11 +333,13 @@ Github repository can be found at {github}
     """.format(description=DESCRIPTION, author=AUTHOR, version=VERSION, github=GIT, license=LICENSE))
 def main():
     ''' Main function '''
-    uart = serial.Serial(PORT, BAUDRATE)
-    device = RN2483(connection=uart, debug=True)
-    print(info())
-    print(device)
-    uart.close()
+    try:
+        uart = serial.Serial(PORT, BAUDRATE)
+        device = RN2483(connection=uart, debug=True)
+        print(info())
+        print(device.isOpen())
+    except:
+        uart.close()
 if __name__ == "__main__":
     main()
     
