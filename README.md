@@ -12,12 +12,24 @@
 | [6] | UART_TX | -> | [15] | UART_RX0 |
 
 ## How to use
-When importing library as module, import pyserial and initialize a connection using your assigned serial interface (e.g /dev/ttyUSB0 - in ubuntu)
-First, install pyserial
-`pip3 install pyserial`
-Import and initialize the module
+When importing library as module, import pyserial and initialize a connection using your assigned serial interface (e.g /dev/ttyUSB0 - in ubuntu).
+
+Install `pyserial`:
+
+```bash
+pip3 install pyserial
+```
+
+Install `rn2483`:
+```bash
+git clone https://github.com/alexantoniades/python-RN2483.git
+cd python-RN2483
+python3 setup.py install
+```
+
+Import and initialize modules
 ```python
-import pyserial
+import serial
 import rn2483
 
 #define serial port and baudrate for rn2583 transceiver
@@ -52,4 +64,3 @@ Close connection
 ```python
 device.close_connection()
 ```
-
