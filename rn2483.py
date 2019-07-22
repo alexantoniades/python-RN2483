@@ -41,7 +41,7 @@ GIT = "https://github.com/alexantoniades/python-RN2483"
 PORT = "/dev/tty"
 BAUDRATE = 57600
 class RN2483:
-    # Commands for RN2483 and RN2903 can be found in the product user guide by Microchip
+    """Commands for RN2483 and RN2903 can be found in the product user guide by Microchip"""
     COMMANDS = {
         # System commands
         "SYSTEM": {
@@ -222,15 +222,12 @@ class RN2483:
         self.debug = debug
         if self.connection is None:
             raise ValueError("Invalid serial connection")
-    # Get serial connection
     def serial_connection(self):
         ''' Serial connection info '''
         return(self.connection)
-    # Close serial connection
     def close_connection(self):
         ''' Close serial connection '''
-        return(self.connection.deinit())
-    # Pass and Execute command to device, return device response
+        return(self.connection.close())
     def execute(self, command):
         ''' Passes and Executes command to device, returns devices response '''
         self.connection.write(bytes(str(command) + "\r\n", "utf-8"))
@@ -238,31 +235,24 @@ class RN2483:
         if self.debug:
             print("Execute: {command} Response: {response}\r\n".format(command=command, response=response))
         return(response)
-    # Get device version
     def version(self):
         ''' Returns RN2483 version '''
         return(self.execute(self.COMMANDS["SYSTEM"]["VERSION"]))
-    # Get device voltage level
     def voltage(self):
         ''' Returns RN2483 Voltage '''
         return(self.execute(self.COMMANDS["SYSTEM"]["VOLTAGE"]))
-    # Get device hardware EUI
     def hardware_eui(self):
         ''' Returns RN2483 Hardware EUI '''
         return(self.execute(self.COMMANDS["SYSTEM"]["HWEUI"]))
-    # Get value at specific address (address in HEX)
     def get_value_at_address(self, address):
-        ''' Returns value at memory address '''
+        ''' Returns value at memory address - address is in HEXadecimal'''
         return(self.execute(self.COMMANDS["SYSTEM"]["NVM"]["GET"].format(address=str(address))))
-    # Set a value at specific memory address (value in HEX)
     def set_value_at_address(self, address, value):
-        ''' Sets value at memory address '''
+        ''' Sets value at memory address - value and address are in HEXadecimal'''
         return(self.execute(self.COMMANDS["SYSTEM"]["NVM"]["SET"].format(address=str(address), value=str(value))))
-    # Set device to sleep for specific duration (duration in milliseconds)
     def sleep(self, duration):
-        ''' Sets device to sleep '''
+        ''' Sets device to sleep - duration is in milliseconds'''
         return(self.execute(self.COMMANDS["SYSTEM"]["SLEEP"].format(duration=str(duration))))
-    # Set device to reset (ON OFF)
     def reset(self):
         ''' Resets RN2483 '''
         return(self.execute(self.COMMANDS["SYSTEM"]["RESET"]))
@@ -336,9 +326,9 @@ def main():
     try:
         uart = serial.Serial(PORT, BAUDRATE)
         device = RN2483(connection=uart, debug=True)
-        print(info())
-        print(device.isOpen())
-    except:
+        #print(info())
+        print(device.connection.isOpen())
+    finally:
         uart.close()
 if __name__ == "__main__":
     main()
