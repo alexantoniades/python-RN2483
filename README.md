@@ -60,6 +60,10 @@ device.config_lorawan(
     appkey=ApplicationKey,
     appeui=ApplicationEUI)
 ```
+Send data
+```python
+device.send("Hello World")
+```
 Close connection
 ```python
 device.close_connection()
