@@ -1,0 +1,138 @@
+# System commands
+SYSTEM: 
+    SLEEP: "sys sleep {duration}"                           # duration = decimal [milliseconds]
+    RESET: "sys reset"
+    FACTORY_RESET: "sys factoryRESET"
+    ERASEFW: "sys eraseFW"
+    VERSION: "sys get ver"
+    VOLTAGE: "sys get vdd"
+    HWEUI: "sys get hweui"
+    NVM: 
+        GET: "sys get nvm {address}"                        # address = Hexadecimal
+        SET: "sys set nvm {address} {value}"                # address, value = Hexadecimal
+    PIN: 
+        GPIO0: "sys set pindig GPIO0 {state}"               # state = 1 or 0 [HIGH or LOW]
+        GPIO1: "sys set pindig GPIO1 {state}"               # state = 1 or 0 [HIGH or LOW]
+        GPIO2: "sys set pindig GPIO2 {state}"               # state = 1 or 0 [HIGH or LOW]
+        GPIO3: "sys set pindig GPIO3 {state}"               # state = 1 or 0 [HIGH or LOW]
+        GPIO4: "sys set pindig GPIO4 {state}"               # state = 1 or 0 [HIGH or LOW]
+        GPIO5: "sys set pindig GPIO5 {state}"               # state = 1 or 0 [HIGH or LOW]
+        GPIO6: "sys set pindig GPIO6 {state}"               # state = 1 or 0 [HIGH or LOW]
+        GPIO7: "sys set pindig GPIO7 {state}"               # state = 1 or 0 [HIGH or LOW]
+        GPIO8: "sys set pindig GPIO8 {state}"               # state = 1 or 0 [HIGH or LOW]
+        GPIO9: "sys set pindig GPIO9 {state}"               # state = 1 or 0 [HIGH or LOW]
+        GPIO10: "sys set pindig GPIO10 {state}"             # state = 1 or 0 [HIGH or LOW]
+        GPIO11: "sys set pindig GPIO11 {state}"             # state = 1 or 0 [HIGH or LOW]
+        GPIO12: "sys set pindig GPIO12 {state}"             # state = 1 or 0 [HIGH or LOW]
+        GPIO13: "sys set pindig GPIO13 {state}"             # state = 1 or 0 [HIGH or LOW]
+        GPIO14: "sys set pindig GPIO14 {state}"             # state = 1 or 0 [HIGH or LOW]
+        UART_CTS: "sys set pindig UART_CTS {state}"         # state = 1 or 0 [HIGH or LOW]
+        UART_RTS: "sys set pindig UART_RTS {state}"         # state = 1 or 0 [HIGH or LOW]
+# LoRaWAN interface commands
+MAC: 
+    RESET_BAND: 
+        433: "mac reset 433"
+        868: "mac reset 868"
+    TX: 
+        CONFIRMED: "mac tx cnf {portnumber} {data}"         # portnumber = decimal [1-223] 
+        UNCONFIRMED: "mac tx uncnf {portnumber} {data}"     # data = Hexadecimal
+    SAVE: "mac save"
+    PAUSE: "mac pause"
+    RESUME: "mac resume"
+    DEVADDR: 
+        GET: "mac get devaddr"
+        SET: "mac set devaddr {address}"                    # address = Hexadecimal
+    DEVEUI: 
+        GET: "mac get deveui"
+        SET: "mac set deveui {deveui}"                      # deveui = 8-byte Hexadecimal
+    APPEUI: 
+        GET: "mac get appeui"
+        SET: "mac set appeui {appeui}"                      # appeui = 8-byte Hexadecimal
+    DATARATE: 
+        GET: "mac get dr"
+        SET: "mac set dr {datarate}"                        # datarate = decimal [0-7]
+    BAND: "mac get band"
+    POWER_INDEX: 
+        GET: "mac get pwridx"
+        SET: "mac set pwridx {powerindex}"                  # powerindex = decimal [0-5]
+    ADAPTIVE_DATARATE: 
+        GET: "mac get adr"
+        SET: "mac set adr {state}"                          # state = on or off
+    RETX: 
+        GET: "mac get retx"
+        SET: "mac set retx {retx}"                          # retx = decimal [0-255]
+    RXDELAY1: 
+        GET: "mac get rxdelay1"
+        SET: "mac set rxdelay1 {delay}"                     # delay = decimal [milliseconds][0-65535]               
+    RXDELAY2: "mac get rxdelay2"
+    AUTO_REPLY: 
+        GET: "mac get ar"
+        SET: "mac set ar {reply}"                           # reply = on or off
+    RX2: 
+        GET: "mac get rx2 {band}"                           # decimal [868 or 433]
+        SET: "mac set rx2 {datarate} {frequency}"           # datarate, frequency = decimal [0-7], [863000000-870000000] or [433050000-434790000]
+    DYCLEPS: "mac get dcycleps"
+    MARGIN: "mac get mrgn"
+    GATEWAY_NUMBER: "mac get gwnb"
+    STATUS: "mac get status"
+    JOIN: "mac join {mode}"                                 # mode = otaa or abp
+    NWKSKEY: "mac set nwkskey {key}"                        # key = 16-byte Hexadecimal
+    APPSKEY: "mac set appskey {key}"                        # key = 16-byte Hexadecimal
+    APPKEY: "mac set appkey {key}"                          # key = 16-byte Hexadecimal
+    BAT: "mac set bat {level}"                              # level = decimal [0-255]
+    LINK_CHECK: "mac set linkchk {check}"                   # check = decimal [0-65535]
+# Radio interface
+RADIO: 
+    RX: "radio rx {size}"                                   # size (decimal) [0-65535] *0 is infinite
+    TX: "radio tx {data}"                                   # data (hexadecimal)
+    CW: "radio cw {state}"                                  # state on or off
+    # Radio monitor
+    BT: 
+        GET: "radio get bt"
+        SET: "radio set bt {value}"                         # gaussain baseband value [none, 1.0, 0.5, 0.3]
+    MODE: 
+        GET: "radio get mod"
+        SET: "radio set mod {mode}"                         # mode [lora or fsk]
+    FREQUENCY: 
+        GET: "radio get freq"
+        SET: "radio set freq {frequency}"                   # frequency [433000000-434800000] or [863000000-870000000]
+    POWER: 
+        GET: "radio get pwr"
+        SET: "radio set pwr {level}"                        # level (decimal) [-3 - 15]      
+    SF: 
+        GET: "radio get sf"
+        SET: "radio set sf {factor}"                        # factor [sf7, sf8, sf9, sf10, sf11, sf12]
+    AUTOFREQBAND: 
+        GET: "radio get afcbw"
+        SET: "radio set afcbw {band}"                       # band (float) [250, 125, 62.5, 31.3, 15.6, 7.8, 3.9, 200, 100, 50, 25, 12.5, 6.3, 3.1, 166.7, 83.3, 41.7, 20.8, 10.4, 5.2, 2.6]
+    RXBW: 
+        GET: "radio get rxbw"
+        SET: "radio set rxbw {bandwidth}"                   # bandwidth (float) [250, 125, 62.5, 32.3, 15.6, 7.8, 3.9, 200, 100, 50, 25, 12.5, 6.3, 3.1, 166.7, 83.3, 41.7, 20.8, 10.4, 5.2, 2.6]
+    BITRATE: 
+        GET: "radio get bitrate"
+        SET: "radio set bitrate {bitrate}"                  # bitrate (decimal) [0-65535]
+    FREQDEV: 
+        GET: "radio get fdev"
+        SET: "radio set fdev {deviation}"                   # deviation (decimal) [0-65535]
+    PREAMBLE: 
+        GET: "radio get prlen"
+        SET: "radio set prlen {preable}"                    # preable (decimal) [0-65535]
+    CRC: 
+        GET: "radio get crc"
+        SET: "radio set crc {status}"                       # status [on or off]
+    IQI: 
+        GET: "radio get iqi"
+        SET: "radio set iqi {status}"                       #status [on or off]
+    CODING_RATE: 
+        GET: "radio get cr"
+        SET: "radio set cr {rate}"                          # rate (string) [4/5, 4/6, 4/7, 4/8]
+    WATCHDOG: 
+        GET: "radio get wdt"
+        SET: "radio set wdt {length}"                       # length (decimal) [0-4294967295] *0 is disable
+    SYNC: 
+        GET: "radio get sync"
+        SET: "radio set sync {word}"                        # word (hexadecimal) [word <= 8 bytes]
+    BANDWIDTH: 
+        GET: "radio get bw"
+        SET: "radio set bw {bandwidth}"                     # bandwidth (decimal) [125, 250, 500]
+    SNR: "radio get snr"
