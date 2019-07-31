@@ -149,7 +149,7 @@ def main():
     ''' Main function '''
     #print(INTRO)
     uart = serial.Serial(PORT, BAUDRATE)
-    device = Lora(connection=uart, debug=True)
+    device = Lora(connection=uart)
     print(device.commands["MAC"]["DEVADDR"]["SET"].format(address="0xB87D"))
 
 if __name__ == "__main__":
