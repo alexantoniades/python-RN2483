@@ -15,11 +15,11 @@
             - Added DOC stirngs to methods and global
         + TODO:
             - Add error handling
-            - Create lighter version for microcontrollers
+            - shrink for microcontrollers
             - Add ESP32 compatibility
 '''
-import serial
 import os
+import serial
 from src.exceptions import *
 from yaml import load, dump, Loader, Dumper
 LICENSE = "Apache License 2.0 - Copyright (c) 2019 Alexandros Antoniades"
@@ -69,9 +69,10 @@ class Lora:
     
     
     
-    def __init__(self, connection=None):
+    def __init__(self, host=None, connection=None):
         ''' Class init, check if serial connection is open '''
         self.connection = connection
+        self.host = host
         
         with open(os.path.join(os.path.dirname(__file__), 'src/commands.yml')) as file:
             self.commands = load(file, Loader=Loader)
@@ -95,54 +96,67 @@ class Lora:
         
     def version(self):
         ''' Returns RN2483 version '''
-        return(self.execute(self.commands["SYSTEM"]["VERSION"]))
+        return(self.execute("sys get ver"))
         
     def voltage(self):
         ''' Returns RN2483 Voltage '''
-        return(self.execute(self.commands["SYSTEM"]["VOLTAGE"]))
+        return(self.execute("sys get vdd"))
         
     def hardware_eui(self):
         ''' Returns RN2483 Hardware EUI '''
-        return(self.execute(self.commands["SYSTEM"]["HWEUI"]))
-        
-    def get_value_at_address(self, address):
-        ''' Returns value at memory address - address is in HEXadecimal'''
-        return(self.execute(self.commands["SYSTEM"]["NVM"]["GET"].format(address=str(address))))
-        
-    def set_value_at_address(self, address, value):
-        ''' Sets value at memory address - value and address are in HEXadecimal'''
-        return(self.execute(self.commands["SYSTEM"]["NVM"]["SET"].format(address=str(address), value=str(value))))
-        
-    def sleep(self, duration):
-        ''' Sets device to sleep - duration is in milliseconds'''
-        return(self.execute(self.commands["SYSTEM"]["SLEEP"].format(duration=str(duration))))
-        
+        return(self.execute("sys get hweui"))
+
     def reset(self):
         ''' Resets RN2483 '''
-        return(self.execute(self.commands["SYSTEM"]["RESET"]))
+        return(self.execute("sys reset"))
         
     # Factory reset device
     def factory_reset(self):
         ''' Factory resets RN2483 '''
-        return(self.execute(self.commands["SYSTEM"]["FACTORY_RESET"]))
+        return(self.execute("sys factoryRESET"))
+
+    def get_value_at_address(self, address):
+        ''' Returns value at memory address - address is in HEXadecimal'''
+        return(self.execute("sys get nvm {0}".format(str(address))))
+        
+    def set_value_at_address(self, address, value):
+        ''' Sets value at memory address - value and address are in HEXadecimal'''
+        return(self.execute("sys set nvm {0} {1}".format(address, value)))
+        
+    def sleep(self, duration):
+        ''' Sets device to sleep - duration is in milliseconds'''
+        return(self.execute("sys sleep {0}".format(duration)))
         
     def set_pin(self, pin, state):
         ''' Sets state of GPIO pin (1 = UP / 0 = DOWN). GPIO is given as GPIO[0-14] '''
         if str(state) in ("high", "HIGH", "up", "UP", "true", "TRUE", "1"):
-            return(self.execute(self.commands["SYSTEM"]["PIN"][str(pin)].format(state="1")))
+            return(self.execute("sys set pindig {0} {1}".format(str(pin), "1")))
         elif str(state) in ("low", "LOW", "down", "DOWN", "false", "FALSE", "0"):
-            return(self.execute(self.commands["SYSTEM"]["PIN"][str(pin)].format(state="0")))
+            return(self.execute("sys set pindig {0} {1}".format(str(pin), "0")))
     
-    def get_snr(self):
+    def adaptive_datarate(self, state):
+        ''' Sets the adaptive datarate to on or off '''
+        return(self.execute("mac set adr {0}".format(str(state)))
+
+    def snr(self):
         ''' Returns transceiver Signal to Noise ratio '''
-        return(self.execute(self.commands["RADIO"]["SNR"]))
+        return(self.execute("radio get snr"))
     
     def send(self, data):
-        ''' Send data over LoRaWAN '''
-        self.execute(self.commands["MAC"]["PAUSE"])
-        return(self.execute(self.commands["RADIO"]["TX"].format(data=str(data))))
+        ''' Send data '''
+        self.execute("mac pause")
+        return(self.execute("radio tx {0}".format(str((data.encode('utf-8')).hex()))))
         
     def receive(self):
+        ''' Receive data '''
+        self.execute("mac pause")
+        self.execute("radio rx 0")
+        return(str((self.connection.readline()).decode("utf-8")))
+
+    def config(self, mode=None, auth=None, nwskey=None, 
+                    appskey=None, devaddr=None, appkey=None, appeui=None):
+        
+        
         pass
          
 def main():
@@ -150,7 +164,7 @@ def main():
     #print(INTRO)
     uart = serial.Serial(PORT, BAUDRATE)
     device = Lora(connection=uart)
-    print(device.commands["MAC"]["DEVADDR"]["SET"].format(address="0xB87D"))
+    print(device.snr())
 
 if __name__ == "__main__":
     main()
