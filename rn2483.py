@@ -164,7 +164,7 @@ def main():
     #print(INTRO)
     uart = serial.Serial(PORT, BAUDRATE)
     device = Lora(connection=uart)
-    print(device.commands["SYSTEM"]["RESET"]
+    print(device.commands["SYSTEM"]["RESET"])
 
 if __name__ == "__main__":
     main()
