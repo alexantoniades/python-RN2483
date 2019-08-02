@@ -136,7 +136,7 @@ class Lora:
     
     def adaptive_datarate(self, state):
         ''' Sets the adaptive datarate to on or off '''
-        return(self.execute("mac set adr {0}".format(str(state)))
+        return(self.execute("mac set adr {0}".format(str(state))))
 
     def snr(self):
         ''' Returns transceiver Signal to Noise ratio '''
