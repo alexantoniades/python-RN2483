@@ -1,6 +1,6 @@
 # System commands
 SYSTEM: 
-    SLEEP: "sys sleep {0}"                           # duration = decimal [milliseconds]
+    SLEEP: "sys sleep {0}"                              # duration = decimal [milliseconds]
     RESET: "sys reset"
     FACTORY_RESET: "sys factoryRESET"
     ERASEFW: "sys eraseFW"
@@ -8,8 +8,8 @@ SYSTEM:
     VOLTAGE: "sys get vdd"
     HWEUI: "sys get hweui"
     NVM: 
-        GET: "sys get nvm {0}"                        # address = Hexadecimal
-        SET: "sys set nvm {0} {1}"                # address, value = Hexadecimal
+        GET: "sys get nvm {0}"                          # address = Hexadecimal
+        SET: "sys set nvm {0} {1}"                      # address, value = Hexadecimal
     PIN: 
         GPIO0: "sys set pindig GPIO0 {0}"               # state = 1 or 0 [HIGH or LOW]
         GPIO1: "sys set pindig GPIO1 {0}"               # state = 1 or 0 [HIGH or LOW]
@@ -34,27 +34,27 @@ MAC:
         "433": "mac reset 433"
         "868": "mac reset 868"
     TX: 
-        CONFIRMED: "mac tx cnf {0} {1}"         # portnumber = decimal [1-223] 
-        UNCONFIRMED: "mac tx uncnf {0} {1}"     # data = Hexadecimal
+        CONFIRMED: "mac tx cnf {0} {1}"                 # portnumber = decimal [1-223] 
+        UNCONFIRMED: "mac tx uncnf {0} {1}"             # data = Hexadecimal
     SAVE: "mac save"
     PAUSE: "mac pause"
     RESUME: "mac resume"
     DEVADDR: 
         GET: "mac get devaddr"
-        SET: "mac set devaddr {0}"                    # address = Hexadecimal
+        SET: "mac set devaddr {0}"                      # address = Hexadecimal
     DEVEUI: 
         GET: "mac get deveui"
-        SET: "mac set deveui {0}"                      # deveui = 8-byte Hexadecimal
+        SET: "mac set deveui {0}"                       # deveui = 8-byte Hexadecimal
     APPEUI: 
         GET: "mac get appeui"
-        SET: "mac set appeui {0}"                      # appeui = 8-byte Hexadecimal
+        SET: "mac set appeui {0}"                       # appeui = 8-byte Hexadecimal
     DATARATE: 
         GET: "mac get dr"
-        SET: "mac set dr {0}"                        # datarate = decimal [0-7]
+        SET: "mac set dr {0}"                           # datarate = decimal [0-7]
     BAND: "mac get band"
     POWER_INDEX: 
         GET: "mac get pwridx"
-        SET: "mac set pwridx {0}"                  # powerindex = decimal [0-5]
+        SET: "mac set pwridx {0}"                       # powerindex = decimal [0-5]
     ADAPTIVE_DATARATE: 
         GET: "mac get adr"
         SET: "mac set adr {0}"                          # state = on or off
@@ -63,23 +63,23 @@ MAC:
         SET: "mac set retx {0}"                          # retx = decimal [0-255]
     RXDELAY1: 
         GET: "mac get rxdelay1"
-        SET: "mac set rxdelay1 {0}"                     # delay = decimal [milliseconds][0-65535]               
+        SET: "mac set rxdelay1 {0}"                      # delay = decimal [milliseconds][0-65535]               
     RXDELAY2: "mac get rxdelay2"
     AUTO_REPLY: 
         GET: "mac get ar"
-        SET: "mac set ar {0}"                           # reply = on or off
+        SET: "mac set ar {0}"                            # reply = on or off
     RX2: 
         GET: "mac get rx2 {0}"                           # decimal [868 or 433]
-        SET: "mac set rx2 {0} {1}"           # datarate, frequency = decimal [0-7], [863000000-870000000] or [433050000-434790000]
+        SET: "mac set rx2 {0} {1}"                       # datarate, frequency = decimal [0-7], [863000000-870000000] or [433050000-434790000]
     DYCLEPS: "mac get dcycleps"
     MARGIN: "mac get mrgn"
     GATEWAY_NUMBER: "mac get gwnb"
     STATUS: "mac get status"
     JOIN: "mac join {0}"                                 # mode = otaa or abp
-    NWKSKEY: "mac set nwkskey {0}"                        # key = 16-byte Hexadecimal
-    APPSKEY: "mac set appskey {0}"                        # key = 16-byte Hexadecimal
-    APPKEY: "mac set appkey {0}"                          # key = 16-byte Hexadecimal
-    BAT: "mac set bat {0}"                              # level = decimal [0-255]
+    NWKSKEY: "mac set nwkskey {0}"                       # key = 16-byte Hexadecimal
+    APPSKEY: "mac set appskey {0}"                       # key = 16-byte Hexadecimal
+    APPKEY: "mac set appkey {0}"                         # key = 16-byte Hexadecimal
+    BAT: "mac set bat {0}"                               # level = decimal [0-255]
     LINK_CHECK: "mac set linkchk {0}"                   # check = decimal [0-65535]
 # Radio interface
 RADIO: 

@@ -20,8 +20,9 @@
 '''
 import os
 import serial
-from src.exceptions import *
-from yaml import load, dump, Loader, Dumper
+from yaml import load, Loader
+from src.exceptions import HostError
+
 LICENSE = "Apache License 2.0 - Copyright (c) 2019 Alexandros Antoniades"
 AUTHOR = "Alexandros Antoniades"
 DESCRIPTION = "A python module for interfacing with the\r\n        RN2483 and RN2903 LoRaWAN transceiver"
@@ -78,7 +79,7 @@ class Lora:
             self.commands = load(file, Loader=Loader)
             
         if self.connection is None:
-            raise ConnectionError("Serial connection not defined")
+            raise HostError
         
     def serial_connection(self):
         ''' Serial connection info '''
@@ -153,11 +154,26 @@ class Lora:
         self.execute("radio rx 0")
         return(str((self.connection.readline()).decode("utf-8")))
 
-    def config(self, mode=None, auth=None, nwskey=None, 
-                    appskey=None, devaddr=None, appkey=None, appeui=None):
-        
-        
-        pass
+    def config_otaa(self, appkey=None, appeui=None):
+        response = { "hweui": None, "appkey": None, "appeui": None, "status": None }
+
+        response["hweui"] = self.execute("sys get hweui")
+        response["appkey"] = self.execute("mac set appkey {0}".format(appkey))
+        response["appeui"] = self.execute("mac set appeui {0}".format(appeui))
+        response["status"] = self.execute("mac save")
+        return(response)
+
+
+    def config_abp(self, nwskey=None, appskey=None, devaddr=None):
+        response = { "hweui": None, "nwkskey": None, "appskey": None, "devaddr": None, "status": None }
+
+        response["hweui"] = self.execute("sys get hweui")
+        response["nwkskey"] = self.execute("mac set nwkskey {0}".format(nwskey))
+        response["appskey"] = self.execute("mac set appskey {0}".format(appskey))
+        response["devaddr"] = self.execute("mac set devaddr {0}".format(devaddr))
+        response["status"] = self.execute("mac save")
+        return(response)
+
          
 def main():
     ''' Main function '''
