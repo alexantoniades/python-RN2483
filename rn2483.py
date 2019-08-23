@@ -72,7 +72,17 @@ PORT = "/dev/tty"
 BAUDRATE = 57600
 class Lora:
     """Commands for RN2483 and RN2903 can be found in the product user guide by Microchip"""
-    
+    def __init__(self, host=None, connection=None):
+        ''' Class init, check if serial connection is open '''
+        self.connection = connection
+        self.host = host
+
+        with open(os.path.join(os.path.dirname(__file__), 'src/commands.yml')) as command_file:
+            self.commands = load(command_file, Loader=Loader)
+
+        if self.connection is None:
+            raise HostError
+
     def serial_connection(self):
         ''' Serial connection info '''
         return(self.connection)
@@ -99,7 +109,7 @@ class Lora:
         ''' Returns RN2483 Hardware EUI '''
         return(self.execute("sys get hweui"))
     
-    self.hardware_eui = self.get_heui()
+    
 
     def reset(self):
         ''' Resets RN2483 '''
@@ -169,17 +179,6 @@ class Lora:
         response["devaddr"] = self.execute("mac set devaddr {0}".format(devaddr))
         response["status"] = self.execute("mac save")
         return(response)
-        
-    def __init__(self, host=None, connection=None):
-        ''' Class init, check if serial connection is open '''
-        self.connection = connection
-        self.host = host
-
-        with open(os.path.join(os.path.dirname(__file__), 'src/commands.yml')) as command_file:
-            self.commands = load(command_file, Loader=Loader)
-
-        if self.connection is None:
-            raise HostError
 
 def main():
     ''' Main function '''
