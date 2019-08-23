@@ -99,7 +99,7 @@ class Lora:
         ''' Returns RN2483 Hardware EUI '''
         return(self.execute("sys get hweui"))
     
-    hardware_eui = self.get_heui()
+    self.hardware_eui = self.get_heui()
 
     def reset(self):
         ''' Resets RN2483 '''
