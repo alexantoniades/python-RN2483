@@ -80,59 +80,59 @@ MAC:
     APPSKEY: "mac set appskey {0}"                       # key = 16-byte Hexadecimal
     APPKEY: "mac set appkey {0}"                         # key = 16-byte Hexadecimal
     BAT: "mac set bat {0}"                               # level = decimal [0-255]
-    LINK_CHECK: "mac set linkchk {0}"                   # check = decimal [0-65535]
+    LINK_CHECK: "mac set linkchk {0}"                    # check = decimal [0-65535]
 # Radio interface
 RADIO: 
     RX: "radio rx {0}"                                   # size (decimal) [0-65535] *0 is infinite
     TX: "radio tx {0}"                                   # data (hexadecimal)
-    CW: "radio cw {0}"                                  # state on or off
+    CW: "radio cw {0}"                                   # state on or off
     # Radio monitor
     BT: 
         GET: "radio get bt"
-        SET: "radio set bt {0}"                         # gaussain baseband value [none, 1.0, 0.5, 0.3]
+        SET: "radio set bt {0}"                          # gaussain baseband value [none, 1.0, 0.5, 0.3]
     MODE: 
         GET: "radio get mod"
         SET: "radio set mod {0}"                         # mode [lora or fsk]
     FREQUENCY: 
         GET: "radio get freq"
-        SET: "radio set freq {0}"                   # frequency [433000000-434800000] or [863000000-870000000]
+        SET: "radio set freq {0}"                        # frequency [433000000-434800000] or [863000000-870000000]
     POWER: 
         GET: "radio get pwr"
-        SET: "radio set pwr {0}"                        # level (decimal) [-3 - 15]      
+        SET: "radio set pwr {0}"                         # level (decimal) [-3 - 15]      
     SF: 
         GET: "radio get sf"
-        SET: "radio set sf {0}"                        # factor [sf7, sf8, sf9, sf10, sf11, sf12]
+        SET: "radio set sf {0}"                          # factor [sf7, sf8, sf9, sf10, sf11, sf12]
     AUTOFREQBAND: 
         GET: "radio get afcbw"
         SET: "radio set afcbw {0}"                       # band (float) [250, 125, 62.5, 31.3, 15.6, 7.8, 3.9, 200, 100, 50, 25, 12.5, 6.3, 3.1, 166.7, 83.3, 41.7, 20.8, 10.4, 5.2, 2.6]
     RXBW: 
         GET: "radio get rxbw"
-        SET: "radio set rxbw {0}"                   # bandwidth (float) [250, 125, 62.5, 32.3, 15.6, 7.8, 3.9, 200, 100, 50, 25, 12.5, 6.3, 3.1, 166.7, 83.3, 41.7, 20.8, 10.4, 5.2, 2.6]
+        SET: "radio set rxbw {0}"                        # bandwidth (float) [250, 125, 62.5, 32.3, 15.6, 7.8, 3.9, 200, 100, 50, 25, 12.5, 6.3, 3.1, 166.7, 83.3, 41.7, 20.8, 10.4, 5.2, 2.6]
     BITRATE: 
         GET: "radio get bitrate"
-        SET: "radio set bitrate {0}"                  # bitrate (decimal) [0-65535]
+        SET: "radio set bitrate {0}"                     # bitrate (decimal) [0-65535]
     FREQDEV: 
         GET: "radio get fdev"
-        SET: "radio set fdev {0}"                   # deviation (decimal) [0-65535]
+        SET: "radio set fdev {0}"                        # deviation (decimal) [0-65535]
     PREAMBLE: 
         GET: "radio get prlen"
-        SET: "radio set prlen {0}"                    # preable (decimal) [0-65535]
+        SET: "radio set prlen {0}"                       # preable (decimal) [0-65535]
     CRC: 
         GET: "radio get crc"
-        SET: "radio set crc {0}"                       # status [on or off]
+        SET: "radio set crc {0}"                         # status [on or off]
     IQI: 
         GET: "radio get iqi"
-        SET: "radio set iqi {0}"                       #status [on or off]
+        SET: "radio set iqi {0}"                         #status [on or off]
     CODING_RATE: 
         GET: "radio get cr"
         SET: "radio set cr {0}"                          # rate (string) [4/5, 4/6, 4/7, 4/8]
     WATCHDOG: 
         GET: "radio get wdt"
-        SET: "radio set wdt {0}"                       # length (decimal) [0-4294967295] *0 is disable
+        SET: "radio set wdt {0}"                         # length (decimal) [0-4294967295] *0 is disable
     SYNC: 
         GET: "radio get sync"
         SET: "radio set sync {0}"                        # word (hexadecimal) [word <= 8 bytes]
     BANDWIDTH: 
         GET: "radio get bw"
-        SET: "radio set bw {0}"                     # bandwidth (decimal) [125, 250, 500]
+        SET: "radio set bw {0}"                          # bandwidth (decimal) [125, 250, 500]
     SNR: "radio get snr"

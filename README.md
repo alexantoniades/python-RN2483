@@ -49,7 +49,7 @@ device = rn2483(connection=uart, debug=True)
 # Check if device is initialized
 print(device.connection.is_open)
 # Check hardware eui
-print(device.hardware_eui())
+print(device.hardware_eui)
 ```
 
 Configure LoRaWAN - Authentication By Personalization
